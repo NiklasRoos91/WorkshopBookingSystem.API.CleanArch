@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Commons\Validators\" />
+    <Folder Include="Features\AvailableSlotFeature\Commands\" />
+    <Folder Include="Features\AvailableSlotFeature\Mappers\" />
+    <Folder Include="Features\AvailableSlotFeature\Handlers\" />
+    <Folder Include="Features\AvailableSlotFeature\Queries\" />
+    <Folder Include="Features\BookingFeature\Mappers\" />
+    <Folder Include="Features\BookingFeature\Handlers\" />
+    <Folder Include="Features\BookingFeature\Queries\" />
+    <Folder Include="Features\ServiceTypeFeature\Mappers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="14.0.0" />
+    <PackageReference Include="FluentValidation" Version="11.11.0" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
+    <PackageReference Include="MediatR" Version="12.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WorkshopBooking.Domain\WorkshopBooking.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

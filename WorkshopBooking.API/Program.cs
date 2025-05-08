@@ -1,4 +1,7 @@
 
+using WorkshopBooking.Application.Extensions;
+using WorkshopBooking.Infrastructure.Extensions;
+
 namespace WorkshopBooking.API
 {
     public class Program
@@ -7,7 +10,12 @@ namespace WorkshopBooking.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Logging.ClearProviders();
+            builder.Logging.AddConsole();
+
             // Add services to the container.
+            builder.Services.AddInfrastructureServices(builder.Configuration);
+            builder.Services.AddApplicationServices();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
