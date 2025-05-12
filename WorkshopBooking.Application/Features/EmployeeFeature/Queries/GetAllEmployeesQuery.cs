@@ -5,7 +5,7 @@ using WorkshopBooking.Application.Features.EmployeeFeature.DTOs;
 
 namespace WorkshopBooking.Application.Features.EmployeeFeature.Queries
 {
-    public class GetAllEmployeesQuery : IRequest<OperationResult<List<EmployeeDto>>>
+    public class GetAllEmployeesQuery : IRequest<OperationResult<List<EmployeeWithUserDto>>>
     {
         public GetAllEmployeesQuery()
         {

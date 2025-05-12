@@ -1,8 +1,11 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using WorkshopBooking.Application.Features.EmployeeFeature.Commands;
 using WorkshopBooking.Application.Features.EmployeeFeature.DTOs;
 using WorkshopBooking.Application.Features.EmployeeFeature.Queries;
+using WorkshopBooking.Domain.Entities;
 
 namespace WorkshopBooking.API.Controllers
 {
@@ -20,9 +23,15 @@ namespace WorkshopBooking.API.Controllers
         // POST: api/Employees
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<EmployeeDto>> PostEmployee([FromBody] EmployeeInputDto employeeInputDto)
+        [Authorize(Roles = "Admin")]  // Endast Admin kan skapa en Employee
+        public async Task<ActionResult<EmployeeWithUserDto>> RegisterEmployee([FromBody] RegisterEmployeeDto registerEmployeeDto)
         {
-            var command = new CreateEmployeeCommand(employeeInputDto);
+            if (registerEmployeeDto == null)
+            {
+                return BadRequest("Invalid employee data.");
+            }
+
+            var command = new RegisterEmployeeCommand(registerEmployeeDto);
             var result = await _mediator.Send(command);
 
             if (result.IsSuccess)
@@ -35,7 +44,8 @@ namespace WorkshopBooking.API.Controllers
 
         // GET: api/Employees
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<EmployeeDto>>> GetEmployees()
+        [Authorize(Roles = "Admin")]  // Admin kan hämta listan
+        public async Task<ActionResult<IEnumerable<EmployeeWithUserDto>>> GetEmployees()
         {
             var query = new GetAllEmployeesQuery();
             var result = await _mediator.Send(query);
@@ -49,10 +59,18 @@ namespace WorkshopBooking.API.Controllers
         }
 
         // GET: api/Employees/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<EmployeeDto>> GetEmployee(int id)
+        [HttpGet("{employeeId}")]
+        [Authorize(Roles = "Admin,Employee")]  // Admin eller Employee kan hämta en specifik Employee
+        public async Task<ActionResult<EmployeeWithUserDto>> GetEmployee(int employeeId)
         {
-            var query = new GetEmployeeByIdQuery(id);
+            // Kontrollera om den inloggade användaren försöker hämtar sin egen data
+            var employeeIdClaim = User.FindFirst("EmployeeId")?.Value;
+            if (employeeIdClaim != employeeId.ToString() && !User.IsInRole("Admin"))
+            {
+                return Forbid();
+            }
+
+            var query = new GetEmployeeByIdQuery(employeeId);
             var result = await _mediator.Send(query);
 
             if (result.IsSuccess)
@@ -65,10 +83,18 @@ namespace WorkshopBooking.API.Controllers
 
         // PUT: api/Employees/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutEmployee(int id, [FromBody] EmployeeInputDto employeeInputDto)
+        [HttpPut("{employeeId}")]
+        [Authorize(Roles = "Admin,Employee")] // Employee och Admin kan uppdatera
+        public async Task<IActionResult> PutEmployee(int employeeId, [FromBody] UpdateEmployeeWithUserDto updateEmployeeWithUserDto)
         {
-            var command = new UpdateEmployeeCommand(id, employeeInputDto);
+            // Kontrollera om den inloggade användaren försöker uppdatera sin egen data
+            var employeeIdClaim = User.FindFirst("EmployeeId")?.Value;
+            if (employeeIdClaim != employeeId.ToString() && !User.IsInRole("Admin"))
+            {
+                return Forbid();
+            }
+
+            var command = new UpdateEmployeeWithUserCommand(employeeId, updateEmployeeWithUserDto);
             var result = await _mediator.Send(command);
 
             if (result.IsSuccess)
@@ -81,9 +107,10 @@ namespace WorkshopBooking.API.Controllers
 
         // DELETE: api/Employees/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteEmployee(int id)
+        [Authorize(Roles = "Admin")]  // Endast Admin kan radera en Employee
+        public async Task<IActionResult> DeleteEmployee(int employeeId)
         {
-            var command = new DeleteEmployeeCommand(id);
+            var command = new DeleteEmployeeWithUserCommand(employeeId);
             var result = await _mediator.Send(command);
 
             if (result.IsSuccess)

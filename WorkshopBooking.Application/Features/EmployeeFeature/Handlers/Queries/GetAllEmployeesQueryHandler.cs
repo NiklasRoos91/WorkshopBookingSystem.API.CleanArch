@@ -8,7 +8,7 @@ using WorkshopBooking.Domain.Interfaces;
 
 namespace WorkshopBooking.Application.Features.EmployeeFeature.Handlers.Queries
 {
-    public class GetAllEmployeesQueryHandler : IRequestHandler<GetAllEmployeesQuery, OperationResult<List<EmployeeDto>>>
+    public class GetAllEmployeesQueryHandler : IRequestHandler<GetAllEmployeesQuery, OperationResult<List<EmployeeWithUserDto>>>
     {
         private readonly IGenericInterface<Employee> _employeeRepository;
         private readonly IMapper _mapper;
@@ -19,18 +19,18 @@ namespace WorkshopBooking.Application.Features.EmployeeFeature.Handlers.Queries
             _mapper = mapper;
         }
 
-        public async Task<OperationResult<List<EmployeeDto>>> Handle(GetAllEmployeesQuery request, CancellationToken cancellationToken)
+        public async Task<OperationResult<List<EmployeeWithUserDto>>> Handle(GetAllEmployeesQuery request, CancellationToken cancellationToken)
         {
             try
             {
-                var employees = await _employeeRepository.GetAllAsync();
-                var employeeDtos = _mapper.Map<List<EmployeeDto>>(employees);
+                var employees = await _employeeRepository.GetAllAsync(c => c.User);
+                var employeeWithUserDto = _mapper.Map<List<EmployeeWithUserDto>>(employees);
 
-                return OperationResult<List<EmployeeDto>>.Success(employeeDtos);
+                return OperationResult<List<EmployeeWithUserDto>>.Success(employeeWithUserDto);
             }
             catch (Exception ex)
             {
-                return OperationResult<List<EmployeeDto>>.Failure($"An error occurred while retrieving employees: {ex.Message}");
+                return OperationResult<List<EmployeeWithUserDto>>.Failure($"An error occurred while retrieving employees: {ex.Message}");
             }
         }
     }

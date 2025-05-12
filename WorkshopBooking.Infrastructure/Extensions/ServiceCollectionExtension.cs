@@ -6,7 +6,6 @@ using WorkshopBooking.Infrastructure.Presistence;
 using WorkshopBooking.Infrastructure.Repositories;
 using WorkshopBooking.Infrastructure.Services;
 
-
 namespace WorkshopBooking.Infrastructure.Extensions
 {
     public static class ServiceCollectionExtensions
@@ -21,6 +20,11 @@ namespace WorkshopBooking.Infrastructure.Extensions
             services.AddHttpClient<IVehicleMakeApiService, VehicleMakeApiService>();
 
             services.AddScoped(typeof(IGenericInterface<>), typeof(GenericRepository<>));
+
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
+            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 
             return services;
         }

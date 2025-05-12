@@ -1,6 +1,4 @@
-﻿
-using WorkshopBooking.Application.Features.CustomerFeature.DTOs;
-using WorkshopBooking.Application.Features.CustomerFeature.Validators;
+﻿using Microsoft.EntityFrameworkCore;
 using WorkshopBooking.Domain.Entities;
 using WorkshopBooking.Domain.Interfaces;
 using WorkshopBooking.Infrastructure.Presistence;
@@ -10,35 +8,18 @@ namespace WorkshopBooking.Infrastructure.Repositories
     public class CustomerRepository : ICustomerRepository
     {
         private readonly WorkshopBookingDbContext _context;
-
-        public Task<Customer> CreateCustomer(Customer customer)
+        
+        public CustomerRepository(WorkshopBookingDbContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
         }
 
-        public Task<bool> DeleteCustomer(int customerId)
+        public async Task<Customer?> GetCustomerWithUserByIdAsync(int customerId)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<Customer>> GetAllCustomers()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Customer?> GetCustomersById(int customerId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<Customer>> GetCustomersWithFilterAndSort(string? filter, string sort)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Customer> UpdateCustomer(int customerId, Customer customer)
-        {
-            throw new NotImplementedException();
+            return await _context.Customers
+               .Where(c => c.CustomerId == customerId)
+               .Include(c => c.User)  // Inkludera relaterad User
+               .FirstOrDefaultAsync();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WorkshopBooking.Application.Features.ServiceTypeFeature.Commands;
 using WorkshopBooking.Application.Features.ServiceTypeFeature.DTOs;
@@ -50,6 +51,7 @@ namespace WorkshopBooking.API.Controllers
         // PUT: api/ServiceTypes/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]  // Endast admin kan uppdatera
         public async Task<IActionResult> PutServiceType(int id, [FromBody] ServiceTypeInputDto serviceTypeInputDto)
         {
             var command = new UpdateServiceTypeCommand(id, serviceTypeInputDto);
@@ -67,6 +69,7 @@ namespace WorkshopBooking.API.Controllers
         // POST: api/ServiceTypes
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Authorize(Roles = "Admin")]  // Endast admin kan skapa
         public async Task<ActionResult<ServiceTypeDto>> PostServiceType( [FromBody] ServiceTypeInputDto serviceTypeInputDto)
         {
             var command = new CreateServiceTypeCommand(serviceTypeInputDto);
@@ -82,6 +85,7 @@ namespace WorkshopBooking.API.Controllers
 
         // DELETE: api/ServiceTypes/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]  // Endast admin kan ta bort
         public async Task<IActionResult> DeleteServiceType(int id)
         {
             var command = new DeleteServiceTypeCommand(id);

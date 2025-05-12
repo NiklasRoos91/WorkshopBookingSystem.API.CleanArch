@@ -1,7 +1,10 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using WorkshopBooking.Application.Features.CustomerFeature.Commands;
 using WorkshopBooking.Application.Features.CustomerFeature.DTOs;
+using WorkshopBooking.Application.Features.CustomerFeature.DTOs.WorkshopBooking.Application.Features.CustomerFeature.DTOs;
 using WorkshopBooking.Application.Features.CustomerFeature.Queries;
 
 namespace WorkshopBooking.API.Controllers
@@ -17,25 +20,24 @@ namespace WorkshopBooking.API.Controllers
             _mediator = mediator;
         }
 
-        // POST: api/Customers
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<CustomerDto>> PostCustomer([FromBody]CustomerInputDto customerInputDto)
+        [HttpPost("register")]
+        public async Task<ActionResult<CustomerWithUserDto>> RegisterCustomer([FromBody] RegisterCustomerDto registerCustomerDto)
         {
-            var command = new CreateCustomerCommand(customerInputDto);
+            var command = new RegisterCustomerCommand(registerCustomerDto);
             var result = await _mediator.Send(command);
 
             if (result.IsSuccess)
-                {
+            {
                 return Ok(result);
-                }
+            }
 
             return BadRequest(result);
         }
 
         // GET: api/Customers
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CustomerDto>>> GetCustomers()
+        [Authorize(Roles = "Admin,Employee")]  // Endast Admin eller Employee kan hämta alla Customer
+        public async Task<ActionResult<IEnumerable<CustomerWithUserDto>>> GetCustomers()
         {
             var query = new GetAllCustomersQuery();
             var result = await _mediator.Send(query);
@@ -49,10 +51,19 @@ namespace WorkshopBooking.API.Controllers
         }
 
         // GET: api/Customers/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<CustomerDto>> GetCustomer(int id)
+        [HttpGet("{customerId}")]
+        [Authorize(Roles = "Admin,Employee,Customer")]
+        public async Task<ActionResult<CustomerWithUserDto>> GetCustomer(int customerId)
         {
-            var query = new GetCustomerByIdQuery(id);
+            // Kontrollera om den inloggade användaren försöker hämta sin egen data
+            var customerIdClaim = User.FindFirst("CustomerId")?.Value;
+            if (customerIdClaim != customerId.ToString() && !User.IsInRole("Admin") && !User.IsInRole("Employee"))
+            {
+                return Forbid();
+            }
+
+
+            var query = new GetCustomerByIdQuery(customerId);
             var result = await _mediator.Send(query);
 
             if (result.IsSuccess)
@@ -65,7 +76,9 @@ namespace WorkshopBooking.API.Controllers
 
         // GET: api/Customers/filtered?filter=someFilter&sort=asc
         [HttpGet("filtered")]
-        public async Task<ActionResult<IEnumerable<CustomerDto>>> GetFilteredCustomers(
+        [Authorize(Roles = "Admin,Employee")]  // Endast Admin eller Employee kan hämta en Customer med filter och sortering
+
+        public async Task<ActionResult<IEnumerable<CustomerWithUserDto>>> GetFilteredCustomers(
             [FromQuery] string? filter = null,
             [FromQuery] string sort = "asc")
         {
@@ -82,10 +95,18 @@ namespace WorkshopBooking.API.Controllers
 
         // PUT: api/Customers/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutCustomer(int id, [FromBody]CustomerInputDto customerInputDto)
+        [HttpPut("{customerId}")]
+        [Authorize(Roles = "Admin,Customer,Employee")]  // Alla kan uppdatera
+        public async Task<IActionResult> PutCustomer(int customerId, [FromBody]UpdateCustomerWithUserDto updateCustomerWithUserDto)
         {
-            var command = new UpdateCustomerCommand(id, customerInputDto);
+            // Kontrollera om den inloggade användaren försöker uppdatera sin egen data
+            var customerIdClaim = User.FindFirst("CustomerId")?.Value;
+            if (customerIdClaim != customerId.ToString() && !User.IsInRole("Admin") && !User.IsInRole("Employee"))
+            {
+                return Forbid();
+            }
+
+            var command = new UpdateCustomerWithUserCommand(customerId, updateCustomerWithUserDto);
             var result = await _mediator.Send(command);
 
             if (result.IsSuccess)
@@ -97,10 +118,11 @@ namespace WorkshopBooking.API.Controllers
         }
 
         // DELETE: api/Customers/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCustomer(int id)
+        [HttpDelete("{customerId}")]
+        [Authorize(Roles = "Admin")]  // Endast Admin kan radera en Customer
+        public async Task<IActionResult> DeleteCustomer(int customerId)
         {
-            var command = new DeleteCustomerCommand(id);
+            var command = new DeleteCustomerWithUserCommand(customerId);
             var result = await _mediator.Send(command);
 
             if (result.IsSuccess)

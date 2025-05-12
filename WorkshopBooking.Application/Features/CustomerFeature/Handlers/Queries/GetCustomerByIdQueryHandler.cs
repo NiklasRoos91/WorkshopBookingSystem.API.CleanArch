@@ -8,35 +8,35 @@ using WorkshopBooking.Domain.Interfaces;
 
 namespace WorkshopBooking.Application.Features.CustomerFeature.Handlers.Queries
 {
-    public class GetCustomerByIdQueryHandler : IRequestHandler<GetCustomerByIdQuery, OperationResult<CustomerDto>>
+    public class GetCustomerByIdQueryHandler : IRequestHandler<GetCustomerByIdQuery, OperationResult<CustomerWithUserDto>>
     {
-        private readonly IGenericInterface<Customer> _customerRepository;
+        private readonly ICustomerRepository _customerRepository;
         private readonly IMapper _mapper;
 
-        public GetCustomerByIdQueryHandler(IGenericInterface<Customer> customerRepository, IMapper autoMapper)
+        public GetCustomerByIdQueryHandler(ICustomerRepository customerRepository, IMapper autoMapper)
         {
             _customerRepository = customerRepository;
             _mapper = autoMapper;
         }
 
-        public async Task<OperationResult<CustomerDto>> Handle(GetCustomerByIdQuery request, CancellationToken cancellationToken)
+        public async Task<OperationResult<CustomerWithUserDto>> Handle(GetCustomerByIdQuery request, CancellationToken cancellationToken)
         {
             try
             {
-                var customer = await _customerRepository.GetByIdAsync(request.Id);
+                var customer = await _customerRepository.GetCustomerWithUserByIdAsync(request.CustomerId);
                 if (customer == null)
                 {
-                    return OperationResult<CustomerDto>.Failure("Customer not found.");
+                    return OperationResult<CustomerWithUserDto>.Failure("Customer not found.");
                 }
 
-                var customerDto = _mapper.Map<CustomerDto>(customer);
+                var customerWithUserDtos = _mapper.Map<CustomerWithUserDto>(customer);
 
-                return OperationResult<CustomerDto>.Success(customerDto);
+                return OperationResult<CustomerWithUserDto>.Success(customerWithUserDtos);
 
             }
             catch (Exception ex)
             {
-                return OperationResult<CustomerDto>.Failure($"An error occurred while retrieving the customer: {ex.Message}");
+                return OperationResult<CustomerWithUserDto>.Failure($"An error occurred while retrieving the customer: {ex.Message}");
             }
         }
     }
