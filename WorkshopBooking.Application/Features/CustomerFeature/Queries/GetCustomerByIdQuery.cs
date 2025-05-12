@@ -4,13 +4,13 @@ using WorkshopBooking.Application.Features.CustomerFeature.DTOs;
 
 namespace WorkshopBooking.Application.Features.CustomerFeature.Queries
 {
-    public class GetCustomerByIdQuery : IRequest<OperationResult<CustomerDto>>
+    public class GetCustomerByIdQuery : IRequest<OperationResult<CustomerWithUserDto>>
     {
-        public int Id { get; set; }
+        public int CustomerId { get; set; }
 
-        public GetCustomerByIdQuery(int id)
+        public GetCustomerByIdQuery(int customeIid)
         {
-            Id = id;
+            CustomerId = customeIid;
         }
     }
 }

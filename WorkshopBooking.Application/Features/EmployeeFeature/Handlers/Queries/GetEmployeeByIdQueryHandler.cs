@@ -8,34 +8,34 @@ using WorkshopBooking.Domain.Interfaces;
 
 namespace WorkshopBooking.Application.Features.EmployeeFeature.Handlers.Queries
 {
-    public class GetEmployeeByIdQueryHandler : IRequestHandler<GetEmployeeByIdQuery, OperationResult<EmployeeDto>>
+    public class GetEmployeeByIdQueryHandler : IRequestHandler<GetEmployeeByIdQuery, OperationResult<EmployeeWithUserDto>>
     {
-        private readonly IGenericInterface<Employee> _employeeRepository;
+        private readonly IEmployeeRepository _employeeRepository;
         private readonly IMapper _mapper;
 
-        public GetEmployeeByIdQueryHandler(IGenericInterface<Employee> employeeRepository, IMapper mapper)
+        public GetEmployeeByIdQueryHandler(IEmployeeRepository employeeRepository, IMapper mapper)
         {
             _employeeRepository = employeeRepository;
             _mapper = mapper;
         }
 
-        public async Task<OperationResult<EmployeeDto>> Handle(GetEmployeeByIdQuery request, CancellationToken cancellationToken)
+        public async Task<OperationResult<EmployeeWithUserDto>> Handle(GetEmployeeByIdQuery request, CancellationToken cancellationToken)
         {
             try
             {
-                var employee = await _employeeRepository.GetByIdAsync(request.Id);
+                var employee = await _employeeRepository.GetEmployeeWithUserByIdAsync(request.EmployeeId);
                 if (employee == null)
                 {
-                    return OperationResult<EmployeeDto>.Failure("Employee not found");
+                    return OperationResult<EmployeeWithUserDto>.Failure("Employee not found");
                 }
 
-                var employeeDto = _mapper.Map<EmployeeDto>(employee);
+                var employeeWithUserDto = _mapper.Map<EmployeeWithUserDto>(employee);
 
-                return OperationResult<EmployeeDto>.Success(employeeDto);
+                return OperationResult<EmployeeWithUserDto>.Success(employeeWithUserDto);
             }
             catch (Exception ex)
             {
-                return OperationResult<EmployeeDto>.Failure($"An error occurred: {ex.Message}");
+                return OperationResult<EmployeeWithUserDto>.Failure($"An error occurred: {ex.Message}");
             }
         }
     }

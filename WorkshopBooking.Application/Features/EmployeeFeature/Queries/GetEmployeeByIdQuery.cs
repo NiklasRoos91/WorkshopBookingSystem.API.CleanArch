@@ -4,13 +4,13 @@ using WorkshopBooking.Application.Features.EmployeeFeature.DTOs;
 
 namespace WorkshopBooking.Application.Features.EmployeeFeature.Queries
 {
-    public class GetEmployeeByIdQuery : IRequest<OperationResult<EmployeeDto>>
+    public class GetEmployeeByIdQuery : IRequest<OperationResult<EmployeeWithUserDto>>
     {
-        public int Id { get; set; }
+        public int EmployeeId { get; set; }
 
-        public GetEmployeeByIdQuery(int id)
+        public GetEmployeeByIdQuery(int employeeId)
         {
-            Id = id;
+            EmployeeId = employeeId;
         }
     }
 }

@@ -8,7 +8,7 @@ using WorkshopBooking.Domain.Interfaces;
 
 namespace WorkshopBooking.Application.Features.CustomerFeature.Handlers.Queries
 {
-    public class GetAllCustomersQueryHandler : IRequestHandler<GetAllCustomersQuery, OperationResult<List<CustomerDto>>>
+    public class GetAllCustomersQueryHandler : IRequestHandler<GetAllCustomersQuery, OperationResult<List<CustomerWithUserDto>>>
     {
         private readonly IGenericInterface<Customer> _customerRepository;
         private readonly IMapper _mapper;
@@ -19,20 +19,19 @@ namespace WorkshopBooking.Application.Features.CustomerFeature.Handlers.Queries
             _mapper = mapper;
         }
 
-        public async Task<OperationResult<List<CustomerDto>>> Handle(GetAllCustomersQuery request, CancellationToken cancellationToken)
+        public async Task<OperationResult<List<CustomerWithUserDto>>> Handle(GetAllCustomersQuery request, CancellationToken cancellationToken)
         {
             try
             {
-                var customers = await _customerRepository.GetAllAsync();
-                var customerDtos = _mapper.Map<List<CustomerDto>>(customers);
+                var customers = await _customerRepository.GetAllAsync(c => c.User);
+                var customerWithUserDtos = _mapper.Map<List<CustomerWithUserDto>>(customers);
 
-                return OperationResult<List<CustomerDto>>.Success(customerDtos);
+                return OperationResult<List<CustomerWithUserDto>>.Success(customerWithUserDtos);
             }
             catch (Exception ex)
             {
-                return OperationResult<List<CustomerDto>>.Failure($"An error occurred while retrieving customers: {ex.Message}");
+                return OperationResult<List<CustomerWithUserDto>>.Failure($"An error occurred while retrieving customers: {ex.Message}");
             }
         }
     }
-
 }

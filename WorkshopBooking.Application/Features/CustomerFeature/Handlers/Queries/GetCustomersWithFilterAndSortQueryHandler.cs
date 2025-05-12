@@ -8,7 +8,7 @@ using WorkshopBooking.Domain.Interfaces;
 
 namespace WorkshopBooking.Application.Features.CustomerFeature.Handlers.Queries
 {
-    public class GetCustomersWithFilterAndSortQueryHandler : IRequestHandler<GetCustomersWithFilterAndSortQuery, OperationResult<IEnumerable<CustomerDto>>>
+    public class GetCustomersWithFilterAndSortQueryHandler : IRequestHandler<GetCustomersWithFilterAndSortQuery, OperationResult<IEnumerable<CustomerWithUserDto>>>
     {
         private readonly IGenericInterface<Customer> _customerRepository;
         private readonly IMapper _mapper;
@@ -19,33 +19,33 @@ namespace WorkshopBooking.Application.Features.CustomerFeature.Handlers.Queries
             _mapper = mapper;
         }
 
-        public async Task<OperationResult<IEnumerable<CustomerDto>>> Handle(GetCustomersWithFilterAndSortQuery request, CancellationToken cancellationToken)
+        public async Task<OperationResult<IEnumerable<CustomerWithUserDto>>> Handle(GetCustomersWithFilterAndSortQuery request, CancellationToken cancellationToken)
         {
             try
             {
-                var customers = await _customerRepository.GetAllAsync();
+                var customers = await _customerRepository.GetAllAsync(c => c.User);
 
                 
                 var filteredCustomers = customers
                     // Filter customers based on the provided filter criteria
                     .Where(c =>
                     string.IsNullOrEmpty(request.Filter) ||
-                    c.FirstName.Contains(request.Filter, StringComparison.OrdinalIgnoreCase) ||
-                    c.LastName.Contains(request.Filter, StringComparison.OrdinalIgnoreCase) ||
+                    c.User.FirstName.Contains(request.Filter, StringComparison.OrdinalIgnoreCase) ||
+                    c.User.LastName.Contains(request.Filter, StringComparison.OrdinalIgnoreCase) ||
                     c.VehicleMake.Contains(request.Filter, StringComparison.OrdinalIgnoreCase)
                     );
 
                 var sortedCustomers = request.Sort?.ToLower() == "desc"
-                    ? filteredCustomers.OrderByDescending(c => c.LastName) // Sort in descending order
-                    : filteredCustomers.OrderBy(c => c.LastName); // Sort in ascending order
+                    ? filteredCustomers.OrderByDescending(c => c.User.LastName) // Sort in descending order
+                    : filteredCustomers.OrderBy(c => c.User.LastName); // Sort in ascending order
 
-                var customerDtos = _mapper.Map<List<CustomerDto>>(sortedCustomers);
+                var customerDtos = _mapper.Map<List<CustomerWithUserDto>>(sortedCustomers);
 
-                return OperationResult<IEnumerable<CustomerDto>>.Success(customerDtos);
+                return OperationResult<IEnumerable<CustomerWithUserDto>>.Success(customerDtos);
             }
             catch (Exception ex)
             {
-                return OperationResult<IEnumerable<CustomerDto>>.Failure($"An error occurred while retrieving customers: {ex.Message}");
+                return OperationResult<IEnumerable<CustomerWithUserDto>>.Failure($"An error occurred while retrieving customers: {ex.Message}");
             }
         }
     }

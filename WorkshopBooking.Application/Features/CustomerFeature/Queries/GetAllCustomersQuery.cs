@@ -4,7 +4,7 @@ using WorkshopBooking.Application.Features.CustomerFeature.DTOs;
 
 namespace WorkshopBooking.Application.Features.CustomerFeature.Queries
 {
-    public class GetAllCustomersQuery : IRequest<OperationResult<List<CustomerDto>>>
+    public class GetAllCustomersQuery : IRequest<OperationResult<List<CustomerWithUserDto>>>
     {
         public GetAllCustomersQuery()
         {

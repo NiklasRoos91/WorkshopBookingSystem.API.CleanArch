@@ -15,7 +15,6 @@
     <Folder Include="Features\BookingFeature\Mappers\" />
     <Folder Include="Features\BookingFeature\Handlers\" />
     <Folder Include="Features\BookingFeature\Queries\" />
-    <Folder Include="Features\ServiceTypeFeature\Mappers\" />
   </ItemGroup>
 
   <ItemGroup>

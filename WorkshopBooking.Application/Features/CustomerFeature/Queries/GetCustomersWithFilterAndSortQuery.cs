@@ -4,7 +4,7 @@ using WorkshopBooking.Application.Features.CustomerFeature.DTOs;
 
 namespace WorkshopBooking.Application.Features.CustomerFeature.Queries
 {
-    public class GetCustomersWithFilterAndSortQuery : IRequest<OperationResult<IEnumerable<CustomerDto>>>
+    public class GetCustomersWithFilterAndSortQuery : IRequest<OperationResult<IEnumerable<CustomerWithUserDto>>>
     {
         public string? Filter { get; set; }
         public string? Sort { get; set; }

@@ -1,6 +1,7 @@
 ﻿using WorkshopBooking.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using WorkshopBooking.Infrastructure.Presistence;
+using System.Linq.Expressions;
 
 namespace WorkshopBooking.Infrastructure.Repositories
 {
@@ -24,12 +25,10 @@ namespace WorkshopBooking.Infrastructure.Repositories
         {
             try
             {
-                // Find the entity by its ID
                 var entity = await _dbSet.FindAsync(id);
-                // If the entity is not found, return false
+
                 if (entity == null) return false;
 
-                // Remove the entity from the DbSet and save changes
                 _dbSet.Remove(entity);
                 await _context.SaveChangesAsync();
                 return true;
@@ -40,15 +39,36 @@ namespace WorkshopBooking.Infrastructure.Repositories
             }
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync()
+        public async Task<IEnumerable<T>> GetAllAsync(params Expression<Func<T, object>>[] includes)
         {
-            return await _dbSet.ToListAsync();
+            IQueryable<T> query = _dbSet;
+
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+
+            return await query.ToListAsync();
         }
 
         public async Task<T> GetByIdAsync(int id)
         {
             return await _dbSet.FindAsync(id);
         }
+
+        //public async Task<T> GetByIdAsync<T>(int id, params Expression<Func<T, object>>[] includes) where T : class
+        //{
+        //    IQueryable<T> query = _dbSet.OfType<T>();
+
+        //    // Lägg till alla includes till frågan
+        //    foreach (var include in includes)
+        //    {
+        //        query = query.Include(include);
+        //    }
+
+        //    // Hämta entiteten baserat på ID
+        //    return await query.Where(entity => EF.Property<int>(entity, "Id") == id).FirstOrDefaultAsync();
+        //}
 
         public async Task UpdateAsync(T entity)
         {
