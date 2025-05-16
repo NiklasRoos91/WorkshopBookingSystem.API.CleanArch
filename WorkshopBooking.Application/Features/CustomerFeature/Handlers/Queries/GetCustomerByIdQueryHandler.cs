@@ -3,7 +3,6 @@ using MediatR;
 using WorkshopBooking.Application.Commons.OperationResult;
 using WorkshopBooking.Application.Features.CustomerFeature.DTOs;
 using WorkshopBooking.Application.Features.CustomerFeature.Queries;
-using WorkshopBooking.Domain.Entities;
 using WorkshopBooking.Domain.Interfaces;
 
 namespace WorkshopBooking.Application.Features.CustomerFeature.Handlers.Queries
@@ -23,13 +22,24 @@ namespace WorkshopBooking.Application.Features.CustomerFeature.Handlers.Queries
         {
             try
             {
-                var customer = await _customerRepository.GetCustomerWithUserByIdAsync(request.CustomerId);
-                if (customer == null)
+                var existingCustomer = await _customerRepository.GetCustomerWithUserByCustomerIdAsync(request.CustomerId);
+                if (existingCustomer == null)
                 {
                     return OperationResult<CustomerWithUserDto>.Failure("Customer not found.");
                 }
 
-                var customerWithUserDtos = _mapper.Map<CustomerWithUserDto>(customer);
+                var user = existingCustomer.User;
+                if (user == null)
+                {
+                    return OperationResult<CustomerWithUserDto>.Failure("User associated with the customer not found.");
+                }
+
+                if (!request.IsAdmin && !request.IsEmployee && existingCustomer.UserId != request.UserId)
+                {
+                    return OperationResult<CustomerWithUserDto>.Failure("You do not have permission to see this customer.");
+                }
+
+                var customerWithUserDtos = _mapper.Map<CustomerWithUserDto>(existingCustomer);
 
                 return OperationResult<CustomerWithUserDto>.Success(customerWithUserDtos);
 

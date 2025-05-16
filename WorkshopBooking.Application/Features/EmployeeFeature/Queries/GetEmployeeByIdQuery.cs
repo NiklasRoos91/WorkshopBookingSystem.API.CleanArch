@@ -6,11 +6,15 @@ namespace WorkshopBooking.Application.Features.EmployeeFeature.Queries
 {
     public class GetEmployeeByIdQuery : IRequest<OperationResult<EmployeeWithUserDto>>
     {
-        public int EmployeeId { get; set; }
+        public int EmployeeId { get; }
+        public int UserId { get; }
+        public bool IsAdmin { get; }
 
-        public GetEmployeeByIdQuery(int employeeId)
+        public GetEmployeeByIdQuery(int employeeId, int userId, bool isAdmin)
         {
             EmployeeId = employeeId;
+            UserId = userId;
+            IsAdmin = isAdmin;
         }
     }
 }

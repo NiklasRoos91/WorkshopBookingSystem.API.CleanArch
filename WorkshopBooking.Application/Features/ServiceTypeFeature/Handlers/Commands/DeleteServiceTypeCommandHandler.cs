@@ -19,16 +19,15 @@ namespace WorkshopBooking.Application.Features.ServiceTypeFeature.Handlers.Comma
         {
             try
             {
-                var exists = await _serviceTypeRepository.ExistsAsync(request.ServiceTypeId);
-
-                if (!exists)
+                var serviceType = await _serviceTypeRepository.GetByIdAsync(request.ServiceTypeId);
+                if (serviceType == null)
                 {
                     return OperationResult<bool>.Failure($"ServiceType with ID {request.ServiceTypeId} not found.");
                 }
 
-                var result = await _serviceTypeRepository.DeleteAsync(request.ServiceTypeId);
+                var serviceTypeDeleted = await _serviceTypeRepository.DeleteAsync(request.ServiceTypeId);
 
-                return OperationResult<bool>.Success(result);
+                return OperationResult<bool>.Success(true);
 
             }
             catch (Exception ex)

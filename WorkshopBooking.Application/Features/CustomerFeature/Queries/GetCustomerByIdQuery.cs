@@ -6,11 +6,17 @@ namespace WorkshopBooking.Application.Features.CustomerFeature.Queries
 {
     public class GetCustomerByIdQuery : IRequest<OperationResult<CustomerWithUserDto>>
     {
-        public int CustomerId { get; set; }
+        public int CustomerId { get; }
+        public int UserId { get; }
+        public bool IsAdmin { get; }
+        public bool IsEmployee { get; }
 
-        public GetCustomerByIdQuery(int customeIid)
+        public GetCustomerByIdQuery(int customerId, int userId, bool isAdmin, bool isEmployee)
         {
-            CustomerId = customeIid;
+            CustomerId = customerId;
+            UserId = userId;
+            IsAdmin = isAdmin;
+            IsEmployee = isEmployee;
         }
     }
 }

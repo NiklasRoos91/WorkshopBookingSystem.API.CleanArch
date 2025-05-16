@@ -31,37 +31,35 @@ namespace WorkshopBooking.Application.Features.CustomerFeature.Handlers.Commands
         {
             try
             {
-                // Hämta Customer och dess associerade User
-                var existingCustomer = await _customerRepositoryWithUser.GetCustomerWithUserByIdAsync(request.CustomerId);
+                var existingCustomer = await _customerRepositoryWithUser.GetCustomerWithUserByCustomerIdAsync(request.CustomerId);
                 if (existingCustomer == null)
                 {
                     return OperationResult<CustomerWithUserDto>.Failure("Customer not found.");
                 }
 
-                // Hämta User som är kopplad till Customer
                 var user = existingCustomer.User;
                 if (user == null)
                 {
                     return OperationResult<CustomerWithUserDto>.Failure("User associated with the customer not found.");
                 }
 
-                // Uppdatera Customer och User med de nya värdena från DTO:n
+                if (!request.IsAdmin && existingCustomer.UserId != request.UserId)
+                {
+                    return OperationResult<CustomerWithUserDto>.Failure("You do not have permission to update this customer.");
+                }
+
                 _mapper.Map(request.UpdateCustomerWithUserDto, existingCustomer);
                 _mapper.Map(request.UpdateCustomerWithUserDto, user);
 
-                // Uppdatera Customer och User i databasen
                 await _customerRepository.UpdateAsync(existingCustomer);
                 await _userRepository.UpdateAsync(user);
 
-                // Skapa CustomerDto från den uppdaterade Customer-objektet
                 var customerWithUserDto = _mapper.Map<CustomerWithUserDto>(existingCustomer);
 
-                // Returnera det uppdaterade resultatet
                 return OperationResult<CustomerWithUserDto>.Success(customerWithUserDto);
             }
             catch (Exception ex)
             {
-                // Hantera eventuella undantag
                 return OperationResult<CustomerWithUserDto>.Failure($"An error occurred while updating customer and user: {ex.Message}");
             }
         }

@@ -31,17 +31,21 @@ namespace WorkshopBooking.Application.Features.EmployeeFeature.Handlers.Commands
         {
             try
             {                 
-                var existingEmployee = await _employeeRepositoryWithUser.GetEmployeeWithUserByIdAsync(request.EmployeeId);
+                var existingEmployee = await _employeeRepositoryWithUser.GetEmployeeWithUserByEmployeeIdAsync(request.EmployeeId);
                 if (existingEmployee == null)
                 {
                     return OperationResult<EmployeeWithUserDto>.Failure("Employee not found.");
                 }
 
-                // Hämta User som är kopplad till Customer
                 var user = existingEmployee.User;
                 if (user == null)
                 {
                     return OperationResult<EmployeeWithUserDto>.Failure("User associated with the customer not found.");
+                }
+
+                if (!request.IsAdmin && existingEmployee.UserId != request.UserId)
+                {
+                    return OperationResult<EmployeeWithUserDto>.Failure("You do not have permission to update this employee.");
                 }
 
                 // Map the updated properties from the request to the existing employee
