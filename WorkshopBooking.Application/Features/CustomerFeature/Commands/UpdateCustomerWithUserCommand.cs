@@ -7,12 +7,16 @@ namespace WorkshopBooking.Application.Features.CustomerFeature.Commands
 {
     public class UpdateCustomerWithUserCommand : IRequest<OperationResult<CustomerWithUserDto>>
     {
-        public int CustomerId { get; set; }
-        public UpdateCustomerWithUserDto UpdateCustomerWithUserDto { get; set; }
+        public int CustomerId { get; }
+        public int UserId { get; }
+        public bool IsAdmin { get; }
+        public UpdateCustomerWithUserDto UpdateCustomerWithUserDto { get; }
 
-        public UpdateCustomerWithUserCommand(int customerId, UpdateCustomerWithUserDto updateCustomerWithUserDto)
+        public UpdateCustomerWithUserCommand(int customerId, int userId, bool isAdmin, UpdateCustomerWithUserDto updateCustomerWithUserDto)
         {
             CustomerId = customerId;
+            UserId = userId;
+            IsAdmin = isAdmin;
             UpdateCustomerWithUserDto = updateCustomerWithUserDto;
         }
     }

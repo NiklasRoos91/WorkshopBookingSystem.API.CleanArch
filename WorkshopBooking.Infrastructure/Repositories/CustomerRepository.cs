@@ -14,7 +14,7 @@ namespace WorkshopBooking.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<Customer?> GetCustomerWithUserByIdAsync(int customerId)
+        public async Task<Customer?> GetCustomerWithUserByCustomerIdAsync(int customerId)
         {
             return await _context.Customers
                .Where(c => c.CustomerId == customerId)

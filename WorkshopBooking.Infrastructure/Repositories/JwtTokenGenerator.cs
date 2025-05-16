@@ -38,6 +38,7 @@ namespace WorkshopBooking.Infrastructure.Repositories
             // Lägg till EmployeeId som claim om användaren är kopplad till en Employee
             if (user.Employee != null)
             {
+                Console.WriteLine($"Adding EmployeeId claim: {user.Employee.EmployeeId}");
                 claims.Add(new Claim("EmployeeId", user.Employee.EmployeeId.ToString()));
             }
 

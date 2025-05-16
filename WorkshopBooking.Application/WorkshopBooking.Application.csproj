@@ -8,10 +8,6 @@
 
   <ItemGroup>
     <Folder Include="Commons\Validators\" />
-    <Folder Include="Features\AvailableSlotFeature\Commands\" />
-    <Folder Include="Features\AvailableSlotFeature\Mappers\" />
-    <Folder Include="Features\AvailableSlotFeature\Handlers\" />
-    <Folder Include="Features\AvailableSlotFeature\Queries\" />
     <Folder Include="Features\BookingFeature\Mappers\" />
     <Folder Include="Features\BookingFeature\Handlers\" />
     <Folder Include="Features\BookingFeature\Queries\" />

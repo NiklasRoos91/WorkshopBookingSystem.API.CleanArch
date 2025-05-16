@@ -4,6 +4,7 @@ namespace WorkshopBooking.Domain.Interfaces
 {
     public interface IEmployeeRepository
     {
-        Task<Employee?> GetEmployeeWithUserByIdAsync(int employeeId);
+        Task<Employee?> GetEmployeeWithUserByEmployeeIdAsync(int employeeId);
+        Task<Employee?> GetEmployeeWithUserByUserIdAsync(int userId);
     }
 }

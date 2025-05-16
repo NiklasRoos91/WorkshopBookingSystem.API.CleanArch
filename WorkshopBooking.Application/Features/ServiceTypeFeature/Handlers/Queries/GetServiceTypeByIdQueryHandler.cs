@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using WorkshopBooking.Application.Commons.OperationResult;
 using WorkshopBooking.Application.Features.ServiceTypeFeature.Queries;
 using WorkshopBooking.Domain.Entities;
@@ -9,10 +10,14 @@ namespace WorkshopBooking.Application.Features.ServiceTypeFeature.Handlers.Queri
     public class GetServiceTypeByIdQueryHandler : IRequestHandler<GetServiceTypeByIdQuery, OperationResult<ServiceType>>
     {
         private readonly IGenericInterface<ServiceType> _serviceTypeRepository;
+        private readonly IMapper _mapper;
 
-        public GetServiceTypeByIdQueryHandler(IGenericInterface<ServiceType> serviceTypeRepository)
+        public GetServiceTypeByIdQueryHandler(
+            IGenericInterface<ServiceType> serviceTypeRepository,
+            IMapper mapper)
         {
             _serviceTypeRepository = serviceTypeRepository;
+            _mapper = mapper;
         }
 
         public async Task<OperationResult<ServiceType>> Handle(GetServiceTypeByIdQuery request, CancellationToken cancellationToken)
@@ -20,13 +25,14 @@ namespace WorkshopBooking.Application.Features.ServiceTypeFeature.Handlers.Queri
             try
             {
                 var serviceType = await _serviceTypeRepository.GetByIdAsync(request.ServiceTypeId);
-
                 if (serviceType == null)
                 {
                     return OperationResult<ServiceType>.Failure("Service type not found.");
                 }
 
-                return OperationResult<ServiceType>.Success(serviceType);
+                var serviceTypeDto = _mapper.Map<ServiceType>(serviceType);
+
+                return OperationResult<ServiceType>.Success(serviceTypeDto);
             }
             catch (Exception ex)
             {

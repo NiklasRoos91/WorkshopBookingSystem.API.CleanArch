@@ -4,6 +4,6 @@ namespace WorkshopBooking.Domain.Interfaces
 {
     public interface ICustomerRepository
     {
-        Task<Customer?> GetCustomerWithUserByIdAsync(int customerId);
+        Task<Customer?> GetCustomerWithUserByCustomerIdAsync(int customerId);
     }
 }

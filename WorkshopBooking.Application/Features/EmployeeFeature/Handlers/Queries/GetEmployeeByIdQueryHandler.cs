@@ -3,7 +3,6 @@ using MediatR;
 using WorkshopBooking.Application.Commons.OperationResult;
 using WorkshopBooking.Application.Features.EmployeeFeature.DTOs;
 using WorkshopBooking.Application.Features.EmployeeFeature.Queries;
-using WorkshopBooking.Domain.Entities;
 using WorkshopBooking.Domain.Interfaces;
 
 namespace WorkshopBooking.Application.Features.EmployeeFeature.Handlers.Queries
@@ -23,13 +22,24 @@ namespace WorkshopBooking.Application.Features.EmployeeFeature.Handlers.Queries
         {
             try
             {
-                var employee = await _employeeRepository.GetEmployeeWithUserByIdAsync(request.EmployeeId);
-                if (employee == null)
+                var existingEmployee = await _employeeRepository.GetEmployeeWithUserByEmployeeIdAsync(request.EmployeeId);
+                if (existingEmployee == null)
                 {
-                    return OperationResult<EmployeeWithUserDto>.Failure("Employee not found");
+                    return OperationResult<EmployeeWithUserDto>.Failure("Employee not found.");
                 }
 
-                var employeeWithUserDto = _mapper.Map<EmployeeWithUserDto>(employee);
+                var user = existingEmployee.User;
+                if (user == null)
+                {
+                    return OperationResult<EmployeeWithUserDto>.Failure("User associated with the customer not found.");
+                }
+
+                if (!request.IsAdmin && existingEmployee.UserId != request.UserId)
+                {
+                    return OperationResult<EmployeeWithUserDto>.Failure("You do not have permission to see this employee.");
+                }
+
+                var employeeWithUserDto = _mapper.Map<EmployeeWithUserDto>(existingEmployee);
 
                 return OperationResult<EmployeeWithUserDto>.Success(employeeWithUserDto);
             }

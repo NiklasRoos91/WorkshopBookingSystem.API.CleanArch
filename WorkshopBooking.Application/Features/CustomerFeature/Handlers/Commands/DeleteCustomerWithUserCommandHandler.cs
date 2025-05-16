@@ -27,7 +27,7 @@ namespace WorkshopBooking.Application.Features.CustomerFeature.Handlers.Commands
         {
             try
             {
-                var customer = await _customerRepository.GetCustomerWithUserByIdAsync(request.CustomerId);
+                var customer = await _customerRepository.GetCustomerWithUserByCustomerIdAsync(request.CustomerId);
 
                 if (customer == null)
                 {

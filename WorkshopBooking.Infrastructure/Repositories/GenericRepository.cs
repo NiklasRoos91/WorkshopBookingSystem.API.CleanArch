@@ -56,20 +56,6 @@ namespace WorkshopBooking.Infrastructure.Repositories
             return await _dbSet.FindAsync(id);
         }
 
-        //public async Task<T> GetByIdAsync<T>(int id, params Expression<Func<T, object>>[] includes) where T : class
-        //{
-        //    IQueryable<T> query = _dbSet.OfType<T>();
-
-        //    // Lägg till alla includes till frågan
-        //    foreach (var include in includes)
-        //    {
-        //        query = query.Include(include);
-        //    }
-
-        //    // Hämta entiteten baserat på ID
-        //    return await query.Where(entity => EF.Property<int>(entity, "Id") == id).FirstOrDefaultAsync();
-        //}
-
         public async Task UpdateAsync(T entity)
         {
             _dbSet.Update(entity);

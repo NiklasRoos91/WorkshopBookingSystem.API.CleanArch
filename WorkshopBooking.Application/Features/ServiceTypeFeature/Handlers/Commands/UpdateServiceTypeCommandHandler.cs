@@ -23,21 +23,21 @@ namespace WorkshopBooking.Application.Features.ServiceTypeFeature.Handlers.Comma
         {
             try
             {
-                var existingServiceType = await _serviceTypeRepository.GetByIdAsync(request.ServiceTypeId);
+                var serviceType = await _serviceTypeRepository.GetByIdAsync(request.ServiceTypeId);
 
-                if (existingServiceType == null)
+                if (serviceType == null)
                 {
                     return OperationResult<ServiceTypeDto>.Failure("Service type not found.");
                 }
 
                 // Map the updated properties from the request to the existing service type
-                _mapper.Map(request.ServiceTypeInputDto, existingServiceType);
+                _mapper.Map(request.ServiceTypeInputDto, serviceType);
 
                 // Update the service type in the repository
-                await _serviceTypeRepository.UpdateAsync(existingServiceType);
+                await _serviceTypeRepository.UpdateAsync(serviceType);
 
                 // Map the updated service type to a DTO
-                var serviceTypeDto = _mapper.Map<ServiceTypeDto>(existingServiceType);
+                var serviceTypeDto = _mapper.Map<ServiceTypeDto>(serviceType);
 
                 return OperationResult<ServiceTypeDto>.Success(serviceTypeDto);
             }

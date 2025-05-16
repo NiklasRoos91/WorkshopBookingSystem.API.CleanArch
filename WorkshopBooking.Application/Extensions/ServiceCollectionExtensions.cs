@@ -3,7 +3,6 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System.Text;
 using WorkshopBooking.Application.Behaviors;
 using WorkshopBooking.Domain.Entities;
 

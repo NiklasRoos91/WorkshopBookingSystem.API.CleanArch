@@ -5,19 +5,14 @@ using WorkshopBooking.Domain.Interfaces;
 
 namespace WorkshopBooking.Application.Features.AvailableSlotFeature.Validators
 {
-    public class AvailableSlotValidator : AbstractValidator<AvailableSlotInputDto>
+    public class AvailableSlotInputValidator : AbstractValidator<AvailableSlotInputDto>
     {
-        public AvailableSlotValidator(IGenericInterface<Customer> customerRepo,
-            IGenericInterface<Employee> employeeRepo,
+        public AvailableSlotInputValidator(
             IGenericInterface<ServiceType> serviceTypeRepo)
         {
             RuleFor(x => x.ServiceTypeId)
                 .MustAsync(async (id, ct) => await serviceTypeRepo.ExistsAsync(id))
                 .WithMessage("Service type does not exist.");
-
-            RuleFor(x => x.EmployeeId)
-                .MustAsync(async (id, ct) => await employeeRepo.ExistsAsync(id))
-                .WithMessage("Employee does not exist.");
 
             RuleFor(x => x.StartTime)
                 .NotEmpty()

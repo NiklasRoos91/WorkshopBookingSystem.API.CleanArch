@@ -26,7 +26,7 @@ namespace WorkshopBooking.Application.Features.EmployeeFeature.Handlers.Commands
         {
             try
             {
-                var employee = await _employeeRepository.GetEmployeeWithUserByIdAsync(request.EmployeeId);
+                var employee = await _employeeRepository.GetEmployeeWithUserByEmployeeIdAsync(request.EmployeeId);
 
                 if (employee == null)
                 {
