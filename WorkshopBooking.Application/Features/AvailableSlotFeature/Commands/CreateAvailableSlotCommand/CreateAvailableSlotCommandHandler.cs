@@ -27,11 +27,10 @@ namespace WorkshopBooking.Application.Features.AvailableSlotFeature.Commands.Cre
         {
             try
             {
-                // Hämta Employee baserat på UserId från token, eftersom EmployeeId inte finns i claims
                 var employee = await _employeeRepository.GetEmployeeWithUserByUserIdAsync(request.UserId);
                 if (employee == null)
                 {
-                    return OperationResult<AvailableSlotDto>.Failure("Användaren har inte en kopplad Employee.");
+                    return OperationResult<AvailableSlotDto>.Failure("The user does not have a linked Employee.");
                 }
 
                 var slot = _mapper.Map<AvailableSlot>(request.AvailableSlotInputDto);

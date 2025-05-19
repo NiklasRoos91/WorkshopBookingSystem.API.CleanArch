@@ -48,6 +48,7 @@ namespace WorkshopBooking.API.Controllers
             }
 
             int userId = userIdResult.Value;
+
             var isAdmin = User.IsInRole("Admin");
             var isEmployee = User.IsInRole("Employee");
 

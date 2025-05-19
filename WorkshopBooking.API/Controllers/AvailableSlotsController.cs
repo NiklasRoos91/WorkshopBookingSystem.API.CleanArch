@@ -4,7 +4,7 @@ using WorkshopBooking.Domain.Entities;
 using WorkshopBooking.Application.Features.AvailableSlotFeature.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using WorkshopBooking.Application.Features.AvailableSlotFeature.Commands.CreateAvailableSlotCommand;
-using WorkshopBooking.Application.Features.AvailableSlotFeature.Commands.DeleteAvailableSlotsCommand;
+using WorkshopBooking.Application.Features.AvailableSlotFeature.Commands.DeleteAvailableSlot;
 using WorkshopBooking.Application.Features.AvailableSlotFeature.Commands.UpdateAvailableSlotCommand;
 using WorkshopBooking.Application.Features.AvailableSlotFeature.Queries.GetAllAvailableSlotsQuery;
 using WorkshopBooking.Application.Features.AvailableSlotFeature.Queries.GetAvailableSlotByIdQuery;

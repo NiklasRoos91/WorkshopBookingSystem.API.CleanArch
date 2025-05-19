@@ -3,32 +3,21 @@ using WorkshopBooking.Application.Features.BookingFeature.DTOs;
 using WorkshopBooking.Domain.Entities;
 using WorkshopBooking.Domain.Interfaces;
 
-
 namespace WorkshopBooking.Application.Features.BookingFeature.Validators
 {
-    public class BookingValidator : AbstractValidator<BookingInputDto>
+    public class UpdateBookingDtoValidator : AbstractValidator<UpdateBookingDto>
     {
-        public BookingValidator(IGenericInterface<Customer> customerRepo,
-            IGenericInterface<Employee> employeeRepo,
+        public UpdateBookingDtoValidator(
             IGenericInterface<ServiceType> serviceTypeRepo)
-        {        
-
+        {
             RuleFor(x => x.ServiceTypeId)
                 .MustAsync(async (id, ct) => await serviceTypeRepo.ExistsAsync(id))
                 .WithMessage("Service type does not exist.");
 
-            RuleFor(x => x.EmployeeId)
-                .MustAsync(async (id, ct) => await employeeRepo.ExistsAsync(id))
-                .WithMessage("Employee does not exist.");
-
-            RuleFor(c => c.CustomerId)
-                .MustAsync(async (id, ct) => await customerRepo.ExistsAsync(id))
-                .WithMessage("Customer does not exist.");
-
             RuleFor(x => x.StartTime)
                 .NotEmpty()
                 .WithMessage("Start time is required.")
-                .GreaterThan(DateTime.Now)
+                .GreaterThan(DateTime.UtcNow)
                 .WithMessage("Start time must be in the future.");
 
             RuleFor(x => x.EndTime)
@@ -38,4 +27,5 @@ namespace WorkshopBooking.Application.Features.BookingFeature.Validators
                 .WithMessage("End time must be later than start time.");
         }
     }
+
 }

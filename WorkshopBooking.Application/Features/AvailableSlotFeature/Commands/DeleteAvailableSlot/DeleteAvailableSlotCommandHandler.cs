@@ -3,7 +3,7 @@ using WorkshopBooking.Application.Commons.OperationResult;
 using WorkshopBooking.Domain.Entities;
 using WorkshopBooking.Domain.Interfaces;
 
-namespace WorkshopBooking.Application.Features.AvailableSlotFeature.Commands.DeleteAvailableSlotsCommand
+namespace WorkshopBooking.Application.Features.AvailableSlotFeature.Commands.DeleteAvailableSlot
 {
     public class DeleteAvailableSlotCommandHandler : IRequestHandler<DeleteAvailableSlotCommand, OperationResult<bool>>
     {

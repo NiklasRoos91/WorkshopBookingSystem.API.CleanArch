@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using WorkshopBooking.Application.Commons.OperationResult;
 
-namespace WorkshopBooking.Application.Features.AvailableSlotFeature.Commands.DeleteAvailableSlotsCommand
+namespace WorkshopBooking.Application.Features.AvailableSlotFeature.Commands.DeleteAvailableSlot
 {
     public class DeleteAvailableSlotCommand : IRequest<OperationResult<bool>>
     {

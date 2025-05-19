@@ -24,6 +24,7 @@ namespace WorkshopBooking.Infrastructure.Extensions
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            services.AddScoped<IBookingRepository, BookingRepository>();
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 
             return services;

@@ -30,7 +30,7 @@ namespace WorkshopBooking.Application.Features.AvailableSlotFeature.Commands.Upd
                 var employee = await _employeeRepository.GetEmployeeWithUserByUserIdAsync(request.UserId);
                 if (employee == null)
                 {
-                    return OperationResult<AvailableSlotDto>.Failure("Användaren har inte en kopplad Employee.");
+                    return OperationResult<AvailableSlotDto>.Failure("User is not connected to Employee.");
                 }
 
                 var availableSlot = await _availableSlotRepository.GetByIdAsync(request.AvailableSlotId);
@@ -41,7 +41,7 @@ namespace WorkshopBooking.Application.Features.AvailableSlotFeature.Commands.Upd
 
                 if (!request.IsAdmin && availableSlot.EmployeeId != employee.EmployeeId)
                 {
-                    return OperationResult<AvailableSlotDto>.Failure("Du har inte behörighet att uppdatera denna slot.");
+                    return OperationResult<AvailableSlotDto>.Failure("You don.t have clearenc to update this slot.");
                 }
 
                 _mapper.Map(request.AvailableSlotInputDto, availableSlot);
