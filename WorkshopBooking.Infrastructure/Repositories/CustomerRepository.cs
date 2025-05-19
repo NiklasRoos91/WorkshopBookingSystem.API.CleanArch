@@ -21,5 +21,13 @@ namespace WorkshopBooking.Infrastructure.Repositories
                .Include(c => c.User)  // Inkludera relaterad User
                .FirstOrDefaultAsync();
         }
+        public async Task<Customer?> GetCustomerWithUserByUserIdAsync(int userId)
+        {
+            return await _context.Customers
+                .Where(c => c.UserId == userId)
+                .Include(c => c.User) // Inkludera relaterad User om du behöver den
+                .FirstOrDefaultAsync();
+        }
+
     }
 }

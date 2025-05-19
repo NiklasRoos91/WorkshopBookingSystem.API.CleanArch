@@ -25,7 +25,7 @@ namespace WorkshopBooking.Infrastructure.Repositories
         {
             return await _context.Employees
                 .Where(e => e.UserId == userId)
-                .Include(e => e.User)  // Inkludera relaterad User (valfritt)
+                .Include(e => e.User)  // Inkludera relaterad User
                 .FirstOrDefaultAsync();
         }
     }
