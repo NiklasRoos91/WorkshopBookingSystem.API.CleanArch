@@ -1,10 +1,11 @@
 ﻿using MediatR;
 using WorkshopBooking.Application.Commons.OperationResult;
+using WorkshopBooking.Application.Features.ServiceTypeFeature.DTOs;
 using WorkshopBooking.Domain.Entities;
 
 namespace WorkshopBooking.Application.Features.ServiceTypeFeature.Queries
 {
-    public class GetServiceTypeByIdQuery : IRequest<OperationResult<ServiceType>>
+    public class GetServiceTypeByIdQuery : IRequest<OperationResult<ServiceTypeDto>>
     {
         public int ServiceTypeId { get; set; }
 

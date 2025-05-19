@@ -1,7 +1,9 @@
 using Microsoft.OpenApi.Models;
+using System.Text.Json.Serialization;
 using WorkshopBooking.API.Extensions;
 using WorkshopBooking.Application.Extensions;
 using WorkshopBooking.Infrastructure.Extensions;
+using WorkshopBooking.API.Converters;
 
 namespace WorkshopBooking.API
 {
@@ -20,17 +22,19 @@ namespace WorkshopBooking.API
             builder.Services.AddJwtAuthenticationService(builder.Configuration);
 
 
-            builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            builder.Services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                    options.JsonSerializerOptions.Converters.Add(new TimeSpanConverter());
+                });
+
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(c =>
             {
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
-                    //In = ParameterLocation.Header,
-                    //Description = "Please enter a valid token",
-                    //Name = "Authorization",
-                    //Type = SecuritySchemeType.ApiKey
                     Description = "JWT Authorization header using the Bearer scheme. Enter only your token.",
                     Name = "Authorization",
                     In = ParameterLocation.Header,
@@ -53,7 +57,15 @@ namespace WorkshopBooking.API
                         new string[] { }
                     }
                 });
+
+                c.MapType<TimeSpan>(() => new OpenApiSchema
+                {
+                    Type = "string",
+                    Format = "time-span",
+                    Example = new Microsoft.OpenApi.Any.OpenApiString("01:30:00")
+                });
             });
+
             var app = builder.Build();
 
 

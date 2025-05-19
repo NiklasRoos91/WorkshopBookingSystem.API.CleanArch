@@ -20,12 +20,9 @@ namespace WorkshopBooking.Application.Features.ServiceTypeFeature.Validators
                  .GreaterThanOrEqualTo(0)
                 .WithMessage("The price must be a positive number. Please check the value.");
 
-
             RuleFor(s => s.Duration)
                 .NotEmpty()
-                .WithMessage("Service type duration is required.")
-                .Must(d => TimeSpan.TryParse(d, out _))
-                .WithMessage("Duration must be a valid format (HH:mm:ss).");
+                .WithMessage("Service type duration is required.");
         }
     }
 }
