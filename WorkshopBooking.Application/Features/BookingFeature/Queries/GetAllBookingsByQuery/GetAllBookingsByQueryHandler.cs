@@ -21,7 +21,7 @@ namespace WorkshopBooking.Application.Features.BookingFeature.Queries.GetAllBook
         {
             try
             {
-                var bookings = _bookingRepository.GetAllAsync().Result;
+                var bookings = await _bookingRepository.GetAllAsync();
                 var bookingDtos = _mapper.Map<List<BookingDto>>(bookings);
 
                 return OperationResult<List<BookingDto>>.Success(bookingDtos);

@@ -110,9 +110,6 @@ namespace WorkshopBooking.API.Controllers
             return NotFound(result);
         }
 
-        // CUSTOMER – gets only their own bookings
-        // EMPLOYEE – gets only their own bookings
-        // ADMIN – gets all bookings for a specific customer
         [HttpGet("customer-my")]
         [Authorize(Roles = "Customer,Employee,Admin")]
         public async Task<ActionResult<IEnumerable<BookingDto>>> GetMyBookingsCustomer()
@@ -120,8 +117,6 @@ namespace WorkshopBooking.API.Controllers
             throw new NotImplementedException();
         }
 
-        // Employee – gets only their own bookings
-        // Admin – gets all bookings for a specific service type
         [HttpGet("by-serviceType{serviceTypeId}")]
         [Authorize(Roles = "Admin,Employee")]
         public async Task<ActionResult<IEnumerable<BookingDto>>> GetBookingByServiceTypeId(int serviceTypeId)
@@ -143,7 +138,7 @@ namespace WorkshopBooking.API.Controllers
 
             int userId = userIdResult.Value;
 
-            var command = new UpdateBookingCommand
+            var command = new UpdateBookingCommand(bookingId, userId, updateBookingDto)
             {
                 BookingId = bookingId,
                 UpdateBookingDto = updateBookingDto,

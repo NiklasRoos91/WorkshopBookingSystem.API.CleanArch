@@ -12,6 +12,11 @@ namespace WorkshopBooking.Application.Features.BookingFeature.Commands.UpdateBoo
         public int BookingId { get; set; }
         public UpdateBookingDto UpdateBookingDto { get; set; }
 
-
+        public UpdateBookingCommand(int bookingId, int userId, UpdateBookingDto updateBookingDto)
+        {
+            BookingId = bookingId;
+            UserId = userId;
+            UpdateBookingDto = updateBookingDto;
+        }
     }
 }

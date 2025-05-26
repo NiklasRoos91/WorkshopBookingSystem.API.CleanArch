@@ -1,11 +1,5 @@
 ﻿using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WorkshopBooking.Application.Features.ServiceTypeFeature.Commands;
-using WorkshopBooking.Application.Features.ServiceTypeFeature.Handlers.Commands;
+using WorkshopBooking.Application.Features.ServiceTypeFeature.Commands.DeleteServiceType;
 using WorkshopBooking.Domain.Entities;
 using WorkshopBooking.Domain.Interfaces;
 
