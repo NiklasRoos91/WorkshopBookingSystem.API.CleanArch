@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
 using WorkshopBooking.Application.Commons.OperationResult;
-using WorkshopBooking.Application.Features.AvailableSlotFeature.DTOs;
 using WorkshopBooking.Application.Features.BookingFeature.DTOs;
 using WorkshopBooking.Domain.Entities;
 using WorkshopBooking.Domain.Interfaces;

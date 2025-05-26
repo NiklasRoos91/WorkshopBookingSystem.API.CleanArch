@@ -1,11 +1,9 @@
 using AutoMapper;
-using WorkshopBooking.Application.Features.ServiceTypeFeature.Handlers.Queries;
 using WorkshopBooking.Domain.Entities;
-using WorkshopBooking.Application.Features.ServiceTypeFeature.DTOs;
-using WorkshopBooking.Application.Features.ServiceTypeFeature.Queries;
-using WorkshopBooking.Application.Commons.OperationResult;
 using Moq;
 using WorkshopBooking.Domain.Interfaces;
+using WorkshopBooking.Application.Features.ServiceTypeFeature.DTOs;
+using WorkshopBooking.Application.Features.ServiceTypeFeature.Queries.GetServiceTypeById;
 
 
 namespace WorkshopBooking.Application.Tests.GetServiceTypeByIdQueryHandlerTests

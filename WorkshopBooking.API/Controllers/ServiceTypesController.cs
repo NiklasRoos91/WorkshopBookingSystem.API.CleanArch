@@ -1,9 +1,12 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WorkshopBooking.Application.Features.ServiceTypeFeature.Commands;
+using WorkshopBooking.Application.Features.ServiceTypeFeature.Commands.CreateServiceType;
+using WorkshopBooking.Application.Features.ServiceTypeFeature.Commands.DeleteServiceType;
+using WorkshopBooking.Application.Features.ServiceTypeFeature.Commands.UpdateServiceType;
 using WorkshopBooking.Application.Features.ServiceTypeFeature.DTOs;
-using WorkshopBooking.Application.Features.ServiceTypeFeature.Queries;
+using WorkshopBooking.Application.Features.ServiceTypeFeature.Queries.GetAllServiceTypes;
+using WorkshopBooking.Application.Features.ServiceTypeFeature.Queries.GetServiceTypeById;
 
 namespace WorkshopBooking.API.Controllers
 {

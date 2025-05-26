@@ -2,10 +2,14 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WorkshopBooking.API.Helpers;
-using WorkshopBooking.Application.Features.CustomerFeature.Commands;
+using WorkshopBooking.Application.Features.CustomerFeature.Commands.DeleteCustomer;
+using WorkshopBooking.Application.Features.CustomerFeature.Commands.RegisterCustomer;
+using WorkshopBooking.Application.Features.CustomerFeature.Commands.UpdateCustomer;
 using WorkshopBooking.Application.Features.CustomerFeature.DTOs;
 using WorkshopBooking.Application.Features.CustomerFeature.DTOs.WorkshopBooking.Application.Features.CustomerFeature.DTOs;
-using WorkshopBooking.Application.Features.CustomerFeature.Queries;
+using WorkshopBooking.Application.Features.CustomerFeature.Queries.GetAllCustomers;
+using WorkshopBooking.Application.Features.CustomerFeature.Queries.GetCustomerById;
+using WorkshopBooking.Application.Features.CustomerFeature.Queries.GetCustomersWithFilterAndSort;
 
 namespace WorkshopBooking.API.Controllers
 {

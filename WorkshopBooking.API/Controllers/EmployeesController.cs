@@ -2,9 +2,12 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WorkshopBooking.API.Helpers;
-using WorkshopBooking.Application.Features.EmployeeFeature.Commands;
+using WorkshopBooking.Application.Features.EmployeeFeature.Commands.DeleteEmployee;
+using WorkshopBooking.Application.Features.EmployeeFeature.Commands.RegisterEmployee;
+using WorkshopBooking.Application.Features.EmployeeFeature.Commands.UpdateEmployee;
 using WorkshopBooking.Application.Features.EmployeeFeature.DTOs;
-using WorkshopBooking.Application.Features.EmployeeFeature.Queries;
+using WorkshopBooking.Application.Features.EmployeeFeature.Queries.GetAllEmployees;
+using WorkshopBooking.Application.Features.EmployeeFeature.Queries.GetEmployeeById;
 
 namespace WorkshopBooking.API.Controllers
 {
