@@ -1,0 +1,30 @@
+name: Build project
+
+on:
+  push:
+    branches:
+      - main    # kör bara när du pushar till main
+  pull_request: # eller när någon öppnar en PR
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Klona repot
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      # 2. Installera Node (byt version om du vill)
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      # 3. Installera beroenden
+      - name: Install dependencies
+        run: npm ci
+
+      # 4. Bygg projektet
+      - name: Build
+        run: npm run build
